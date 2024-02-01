@@ -1,0 +1,37 @@
+[tool.flake8]
+ignore = "H,E501,W503,F841,F401"
+
+[tool.isort] # not used for now
+profile = "black"
+line_length = 120
+
+[tool.black]
+line-length = 120
+target-version = ["py38"]
+
+[tool.mypy]
+python_version = 3.8
+show_error_codes = true
+warn_unused_ignores = false
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = [
+       "rospy",
+       "rostest",
+       "rospkg",
+       "cv_bridge",
+       "dynamic_reconfigure.*",
+       "vlm_ros.cfg",
+       "std_msgs.msg",
+       "sensor_msgs.msg",
+       "geometry_msgs.msg",
+       "jsk_recognition_msgs.msg",
+       "jsk_topic_tools",
+       "jsk_data",
+       "requests",
+       "flask",
+       "pipeline.*",
+       "llava.*"
+]
+ignore_missing_imports = true
