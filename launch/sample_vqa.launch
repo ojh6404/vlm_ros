@@ -17,7 +17,7 @@
     </rosparam>
   </node>
 
-  <!-- qui -->
+  <!-- gui -->
   <include file="$(find vlm_ros)/launch/vqa_gui.launch" if="$(arg gui)" >
       <arg name="prompt_image" value="$(arg input_image)"/>
   </include>
