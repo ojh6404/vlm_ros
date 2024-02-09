@@ -1,4 +1,5 @@
-FROM nvidia/cuda:12.1.1-cudnn8-runtime-ubuntu20.04
+ARG CUDA_VERSION=11.8 # or 12.1
+FROM nvidia/cuda:${CUDA_VERSION}.0-devel-ubuntu20.04
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt -o Acquire::AllowInsecureRepositories=true update \
     && apt-get install -y \
@@ -28,35 +29,13 @@ RUN ln -s /usr/bin/python3.10 /usr/bin/python
 # set workdir root
 WORKDIR /root
 
-# virtualenv for honeybee
-RUN git clone https://github.com/kakaobrain/honeybee.git &&\
-    cd honeybee &&\
-    python -m venv honeybee_venv &&\
-    honeybee_venv/bin/pip install --upgrade pip setuptools wheel &&\
-    honeybee_venv/bin/pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu121 &&\
-    honeybee_venv/bin/pip install -r requirements.txt &&\
-    honeybee_venv/bin/pip install -r requirements_demo.txt &&\
-    honeybee_venv/bin/pip install flask sentencepiece opencv-python
+# honeybee setup
+COPY honeybee_setup.sh /root/honeybee_setup.sh
+RUN /bin/bash /root/honeybee_setup.sh
 
-# download honeybee checkpoints
-RUN mkdir -p honeybee/checkpoints &&\
-    wget -q https://twg.kakaocdn.net/brainrepo/models/honeybee/7B-C-Abs-M144.tar.gz -O honeybee/checkpoints/7B-C-Abs-M144.tar.gz &&\
-    tar -xvzf honeybee/checkpoints/7B-C-Abs-M144.tar.gz -C honeybee/checkpoints &&\
-    rm -f honeybee/checkpoints/7B-C-Abs-M144.tar.gz
-RUN wget -q https://twg.kakaocdn.net/brainrepo/models/honeybee/7B-D-Abs-M144.tar.gz -O honeybee/checkpoints/7B-D-Abs-M144.tar.gz &&\
-    tar -xvzf honeybee/checkpoints/7B-D-Abs-M144.tar.gz -C honeybee/checkpoints &&\
-    rm -f honeybee/checkpoints/7B-D-Abs-M144.tar.gz
-RUN wget -q https://twg.kakaocdn.net/brainrepo/models/honeybee/7B-C-Abs-M256.tar.gz -O honeybee/checkpoints/7B-C-Abs-M256.tar.gz &&\
-    tar -xvzf honeybee/checkpoints/7B-C-Abs-M256.tar.gz -C honeybee/checkpoints &&\
-    rm -f honeybee/checkpoints/7B-C-Abs-M256.tar.gz
-
-# virtualenv for llava
-RUN git clone https://github.com/haotian-liu/LLaVA.git &&\
-    cd LLaVA &&\
-    python -m venv llava_venv &&\
-    llava_venv/bin/pip install --upgrade pip setuptools wheel &&\
-    llava_venv/bin/pip install -e . &&\
-    llava_venv/bin/pip install flask opencv-python protobuf
+# LLaVA setup
+COPY llava_setup.sh /root/llava_setup.sh
+RUN /bin/bash /root/llava_setup.sh
 
 # remove pip cache
 RUN rm -rf /root/.cache/pip
