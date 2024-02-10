@@ -30,9 +30,9 @@ RUN ln -s /usr/bin/python3.10 /usr/bin/python
 WORKDIR /root
 
 # setup python environment
-COPY setup.sh /root/setup.sh
-RUN chmod +x /root/setup.sh
-RUN /bin/bash -c "source /root/setup.sh && honeybee_setup && llava_setup && rm -rf /root/setup.sh"
+COPY python_setup.sh /root/python_setup.sh
+RUN chmod +x /root/python_setup.sh
+RUN /bin/bash -c "source /root/python_setup.sh && honeybee_setup && llava_setup && rm -rf /root/python_setup.sh"
 RUN rm -rf /root/.cache/pip
 
 # copy entrypoint and server scripts
