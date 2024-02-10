@@ -2,8 +2,8 @@
 
 # virtualenv for honeybee
 honeybee_setup() {
-    git clone https://github.com/kakaobrain/honeybee.git &&\
-        cd honeybee &&\
+    git clone https://github.com/kakaobrain/honeybee.git /root/honeybee &&\
+        cd /root/honeybee &&\
         python -m venv honeybee_venv &&\
         honeybee_venv/bin/pip install --upgrade pip setuptools wheel &&\
         if [ "$CUDA_VERSION" = "11.8.0" ]; then\
@@ -21,8 +21,8 @@ honeybee_setup() {
 
 # virtualenv for llava
 llava_setup() {
-    git clone https://github.com/haotian-liu/LLaVA.git &&\
-        cd LLaVA &&\
+    git clone https://github.com/haotian-liu/LLaVA.git /root/LLaVA &&\
+        cd /root/LLaVA &&\
         python -m venv llava_venv &&\
         llava_venv/bin/pip install --upgrade pip setuptools wheel &&\
         llava_venv/bin/pip install -e . &&\
