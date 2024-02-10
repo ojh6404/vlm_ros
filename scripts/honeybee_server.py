@@ -15,7 +15,7 @@ from argparse import ArgumentParser
 
 from pipeline.interface import get_model
 
-MODEL_NAME = ["7B-C-Abs-M144", "7B-D-Abs-M144", "7B-C-Abs-M256", "13B-C-Abs-M256", "13B-D-Abs-M256", "13B-C-13B-M576"]
+MODEL_NAME = ["7B-C-Abs-M144", "7B-D-Abs-M144", "7B-C-Abs-M256", "13B-C-Abs-M256", "13B-D-Abs-M256", "13B-C-Abs-M576"]
 
 def parse_args():
     args = ArgumentParser()
