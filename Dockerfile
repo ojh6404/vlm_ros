@@ -29,17 +29,13 @@ RUN ln -s /usr/bin/python3.10 /usr/bin/python
 # set workdir root
 WORKDIR /root
 
-# honeybee setup
-COPY honeybee_setup.sh /root/honeybee_setup.sh
-RUN /bin/bash /root/honeybee_setup.sh
-
-# LLaVA setup
-COPY llava_setup.sh /root/llava_setup.sh
-RUN /bin/bash /root/llava_setup.sh
-
-# remove pip cache
+# setup python environment
+COPY setup.sh /root/setup.sh
+RUN chmod +x /root/setup.sh
+RUN /bin/bash -c "source /root/setup.sh && honeybee_setup && llava_setup && rm -rf /root/setup.sh"
 RUN rm -rf /root/.cache/pip
 
+# copy entrypoint and server scripts
 COPY scripts/honeybee_server.py /root/honeybee/server.py
 COPY scripts/llava_server.py /root/LLaVA/server.py
 COPY scripts/entrypoint.sh /root/entrypoint.sh

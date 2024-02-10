@@ -8,6 +8,7 @@ import base64
 import numpy as np
 import cv2
 from flask import Flask, request, jsonify
+from argparse import ArgumentParser
 
 from llava.constants import (
     IMAGE_TOKEN_INDEX,
@@ -26,24 +27,30 @@ from llava.mm_utils import (
     KeywordsStoppingCriteria,
 )
 
+def parse_args():
+    args = ArgumentParser()
+    args.add_argument("--model_name", type=str, default="7B", help="model name to load", choices=["7B", "13B"])
+    args.add_argument("--load_in_8bit", action="store_true", help="load in 8bit")
+    args.add_argument("--load_in_4bit", action="store_true", help="load in 4bit")
+    args.add_argument("--device", type=str, default="cuda", help="device to use for inference")
+    return args.parse_args()
 
-model_path = "liuhaotian/llava-v1.5-13b"
-prompt = "What are the things I should be cautious about when I visit here?"
+args = parse_args()
+model_path = "liuhaotian/llava-v1.5-7b" if args.model_name == "7B" else "liuhaotian/llava-v1.5-13b"
 model_name = get_model_name_from_path(model_path)
-load_8bit = False
-load_4bit = True
-device = "cuda:0"
+if args.load_in_4bit:
+    args.load_in_8bit = False
 print(f"Model loaded from {model_path}")
 
-disable_torch_init()
+disable_torch_init() # faster loading
 tokenizer, model, image_processor, context_len = load_pretrained_model(
     model_path=model_path,
     model_base=None,
     model_name=model_name,
-    load_8bit=load_8bit,
-    load_4bit=load_4bit,
+    load_8bit=args.load_in_8bit,
+    load_4bit=args.load_in_4bit,
     device_map="auto",
-    device=device,
+    device=args.device,
 )
 
 
