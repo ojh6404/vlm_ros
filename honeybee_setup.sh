@@ -5,12 +5,12 @@ git clone https://github.com/kakaobrain/honeybee.git &&\
     cd honeybee &&\
     python -m venv honeybee_venv &&\
     honeybee_venv/bin/pip install --upgrade pip setuptools wheel &&\
-    if [ "$CUDA_VERSION" = "11.8" ]; then\
+    if [ "$CUDA_VERSION" = "11.8.0" ]; then\
         honeybee_venv/bin/pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu118;\
-    elif [ "$CUDA_VERSION" = "12.1" ]; then\
+    elif [ "$CUDA_VERSION" = "12.1.0" ]; then\
         honeybee_venv/bin/pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu121;\
     else\
-        echo "CUDA_VERSION is not supported";\
+        echo "CUDA_VERSION $CUDA_VERSION is not supported";
         exit 1;\
     fi &&\
     honeybee_venv/bin/pip install -r requirements.txt &&\
