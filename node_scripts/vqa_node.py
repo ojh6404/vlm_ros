@@ -11,7 +11,7 @@ import rospy
 from dynamic_reconfigure.server import Server
 from vlm_ros.cfg import VLMConfig as ServerConfig
 from cv_bridge import CvBridge, CvBridgeError
-from llm_ros.msg import Message
+from llm_common_msgs.msg import Message
 from sensor_msgs.msg import Image
 
 
