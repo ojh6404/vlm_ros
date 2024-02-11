@@ -4,6 +4,7 @@ project(vlm_ros)
 find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   dynamic_reconfigure
+  llm_ros
 )
 
 # Dynamic reconfigure setup
