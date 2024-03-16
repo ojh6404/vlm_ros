@@ -11,7 +11,7 @@ import rospy
 from dynamic_reconfigure.server import Server
 from vlm_ros.cfg import VLMConfig as ServerConfig
 from cv_bridge import CvBridge, CvBridgeError
-from llm_common_msgs.msg import Message
+from std_msgs.msg import String
 from sensor_msgs.msg import Image
 
 
@@ -25,7 +25,7 @@ class QueryNode(object):
         self.reconfigure_server = Server(ServerConfig, self.config_cb)
 
         self.bridge = CvBridge()
-        self.pub_text = rospy.Publisher(f"~output/{self.app_name}", Message, queue_size=1)
+        self.pub_text = rospy.Publisher(f"~output/{self.app_name}", String, queue_size=1)
         self.sub_img = rospy.Subscriber("~input_image", Image, self.callback)
 
     def config_cb(self, config, level):
@@ -46,7 +46,7 @@ class QueryNode(object):
             query = self.queries[0].replace("\\n", "\n")
             result = self.inference(img, [query])
             rospy.loginfo(result["answeres"][0])
-            text_msg = Message(header=msg.header)
+            text_msg = String()
             text_msg.message = result["answeres"][0] # TODO : batch
             self.pub_text.publish(text_msg)
 
